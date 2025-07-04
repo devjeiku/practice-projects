@@ -36,6 +36,7 @@ function Form() {
             packed: false,
             id: Date.now(),
         };
+
         console.log(newItem);
 
         setDescription('');
@@ -116,6 +117,16 @@ function Item({ key, description, quantity, packed }) {
 //                 {item.quantity} {item.description}
 //             </span>
 //         </li>
+//     );
+// }
+
+// function Stats() {
+//     return (
+//         <footer>
+//             <em>
+//                 💼 You have X items on your list, and you already packed X (X%)
+//             </em>
+//         </footer>
 //     );
 // }
 
