@@ -14,7 +14,14 @@ export default function App() {
     }
 
     function handleDeleteItem(id) {
-        setItems((prev) => prev.filter((item) => item.id !== id));
+        const itemToDelete = items.find((item) => item.id === id);
+
+        const confirmed = window.confirm(
+            `Are you sure you want to delete ${itemToDelete.quantity} ${itemToDelete.description}?`
+        );
+
+        if (confirmed)
+            setItems((prev) => prev.filter((item) => item.id !== id));
     }
 
     function handleToggleItem(id) {
@@ -25,6 +32,14 @@ export default function App() {
         );
     }
 
+    function handleClearList() {
+        const confirmed = window.confirm(
+            'Are you sure you want to delete all items?'
+        );
+
+        if (confirmed) setItems([]);
+    }
+
     return (
         <div className='app'>
             <Logo />
@@ -33,6 +48,7 @@ export default function App() {
                 items={items}
                 onDeleteItem={handleDeleteItem}
                 onToggleItem={handleToggleItem}
+                onClearList={handleClearList}
             />
             <Stats items={items} />
         </div>
@@ -93,7 +109,7 @@ function Form({ onAddItems }) {
     );
 }
 
-function PackingList({ items, onDeleteItem, onToggleItem }) {
+function PackingList({ items, onDeleteItem, onToggleItem, onClearList }) {
     const [sortBy, setSortBy] = useState('input');
 
     let sortedItems;
@@ -127,28 +143,20 @@ function PackingList({ items, onDeleteItem, onToggleItem }) {
                 ))}
             </ul>
 
-            <div className='actions'>
-                <select value={sortBy} onChange={handleChange}>
-                    <option value='input'>Sort by input order</option>
-                    <option value='description'>Sort by description</option>
-                    <option value='packed'>Sort by packed status</option>
-                </select>
-            </div>
+            {items.length ? (
+                <div className='actions'>
+                    <select value={sortBy} onChange={handleChange}>
+                        <option value='input'>Sort by input order</option>
+                        <option value='description'>Sort by description</option>
+                        <option value='packed'>Sort by packed status</option>
+                    </select>
+
+                    <button onClick={onClearList}>Clear List</button>
+                </div>
+            ) : null}
         </div>
     );
 }
-
-// function PackingList() {
-//     return (
-//         <div className='list'>
-//             <ul>
-//                 {initialItems.map((item) => (
-//                     <Item item={item} />
-//                 ))}
-//             </ul>
-//         </div>
-//     );
-// }
 
 function Item({
     id,
