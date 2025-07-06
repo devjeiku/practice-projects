@@ -94,10 +94,30 @@ function Form({ onAddItems }) {
 }
 
 function PackingList({ items, onDeleteItem, onToggleItem }) {
+    const [sortBy, setSortBy] = useState('input');
+
+    let sortedItems;
+
+    if (sortBy === 'input') sortedItems = items;
+
+    if (sortBy === 'description')
+        sortedItems = items
+            .slice()
+            .sort((a, b) => a.description.localeCompare(b.description));
+
+    if (sortBy === 'packed')
+        sortedItems = items
+            .slice()
+            .sort((a, b) => Number(a.packed) - Number(b.packed));
+
+    function handleChange(e) {
+        setSortBy(e.target.value);
+    }
+
     return (
         <div className='list'>
             <ul>
-                {items.map((item) => (
+                {sortedItems.map((item) => (
                     <Item
                         key={item.id}
                         {...item}
@@ -106,6 +126,14 @@ function PackingList({ items, onDeleteItem, onToggleItem }) {
                     />
                 ))}
             </ul>
+
+            <div className='actions'>
+                <select value={sortBy} onChange={handleChange}>
+                    <option value='input'>Sort by input order</option>
+                    <option value='description'>Sort by description</option>
+                    <option value='packed'>Sort by packed status</option>
+                </select>
+            </div>
         </div>
     );
 }
@@ -134,12 +162,18 @@ function Item({
         <li>
             <input
                 type='checkbox'
-                value={packed}
+                checked={packed}
                 onChange={() => {
                     onToggleItem(id);
                 }}
             />
-            <span style={packed ? { textDecoration: 'line-through' } : {}}>
+            <span
+                onClick={() => onToggleItem(id)}
+                style={{
+                    cursor: 'pointer',
+                    textDecoration: packed ? 'line-through' : 'none',
+                }}
+            >
                 {quantity} {description}
             </span>
             <button onClick={() => onDeleteItem(id)}>❌</button>
@@ -147,23 +181,12 @@ function Item({
     );
 }
 
-// function Item({ item }) {
-//     return (
-//         <li>
-//             <span>
-//                 {' '}
-//                 {item.quantity} {item.description}
-//             </span>
-//         </li>
-//     );
-// }
-
 function Stats({ items }) {
     if (!items.length)
         return (
-            <p className='stats'>
+            <footer className='stats'>
                 <em>Start adding some items to your packing list 🚀</em>
-            </p>
+            </footer>
         );
 
     const numItems = items.length;
