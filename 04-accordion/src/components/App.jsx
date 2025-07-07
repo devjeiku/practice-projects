@@ -1,3 +1,4 @@
+import Accordion from './Accordion';
 import './styles.css';
 
 const faqs = [
@@ -20,28 +21,5 @@ export default function App() {
         <div>
             <Accordion faqs={faqs} />
         </div>
-    );
-}
-
-function Accordion({ faqs }) {
-    return (
-        <div>
-            {faqs.map((item) => (
-                <Item title={item.title} text={item.text} />
-            ))}
-        </div>
-    );
-}
-
-function Item({ title, text }) {
-    return (
-        <>
-            <div>
-                <span>{title}</span>
-            </div>
-            <div>
-                <span>{text}</span>
-            </div>
-        </>
     );
 }
