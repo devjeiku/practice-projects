@@ -4,15 +4,18 @@ export default function Item({ num, title, text }) {
     const [isOpen, setIsOpen] = useState(false);
 
     function handleClick() {
-        setIsOpen((prev) => !prev);
+        setIsOpen((isOpen) => !isOpen);
     }
 
     return (
         <>
-            <div className={`item ${isOpen ? 'open' : ''}`}>
+            <div
+                className={`item ${isOpen ? 'open' : ''}`}
+                onClick={handleClick}
+            >
                 <p className='number'>{num < 9 ? `0${num + 1}` : num + 1}</p>
                 <p className='title'>{title}</p>
-                <p className='icon' onClick={handleClick}>
+                <p className='icon'>
                     {isOpen ? (
                         <svg
                             xmlns='http://www.w3.org/2000/svg'
