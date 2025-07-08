@@ -1,17 +1,15 @@
-import { useState } from 'react';
+export default function Item({ num, title, currentOpen, onOpen, children }) {
+    // const [isOpen, setIsOpen] = useState(false);
+    const isOpen = num === currentOpen;
 
-export default function Item({ num, title, text }) {
-    const [isOpen, setIsOpen] = useState(false);
-
-    function handleClick() {
-        setIsOpen((isOpen) => !isOpen);
+    function handleToggle() {
+        onOpen(isOpen ? null : num);
     }
-
     return (
         <>
             <div
                 className={`item ${isOpen ? 'open' : ''}`}
-                onClick={handleClick}
+                onClick={handleToggle}
             >
                 <p className='number'>{num < 9 ? `0${num + 1}` : num + 1}</p>
                 <p className='title'>{title}</p>
@@ -50,7 +48,7 @@ export default function Item({ num, title, text }) {
                     )}
                 </p>
 
-                {isOpen && <div className='content-box'>{text}</div>}
+                {isOpen && <div className='content-box'>{children}</div>}
             </div>
         </>
     );
