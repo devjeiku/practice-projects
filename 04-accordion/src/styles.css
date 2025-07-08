@@ -49,11 +49,6 @@ body {
     grid-column: 2 / -1;
     padding-bottom: 16px;
     line-height: 1.6;
-    display: none;
-}
-
-.content-box.show {
-    display: block;
 }
 
 .content-box ul {

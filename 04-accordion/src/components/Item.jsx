@@ -1,19 +1,19 @@
 import { useState } from 'react';
 
 export default function Item({ num, title, text }) {
-    const [isActive, setIsActive] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     function handleClick() {
-        setIsActive((prev) => !prev);
+        setIsOpen((prev) => !prev);
     }
 
     return (
         <>
-            <div className={`item ${isActive ? 'open' : ''}`}>
+            <div className={`item ${isOpen ? 'open' : ''}`}>
                 <p className='number'>{num < 9 ? `0${num + 1}` : num + 1}</p>
                 <p className='title'>{title}</p>
                 <p className='icon' onClick={handleClick}>
-                    {isActive ? (
+                    {isOpen ? (
                         <svg
                             xmlns='http://www.w3.org/2000/svg'
                             width='24'
@@ -46,9 +46,8 @@ export default function Item({ num, title, text }) {
                         </svg>
                     )}
                 </p>
-                <div className={`content-box ${isActive ? 'show' : ''}`}>
-                    {text}
-                </div>
+
+                {isOpen && <div className='content-box'>{text}</div>}
             </div>
         </>
     );
