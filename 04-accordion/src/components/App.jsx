@@ -1,5 +1,5 @@
 import Accordion from './Accordion';
-import './styles.css';
+import '../styles.css';
 
 const faqs = [
     {
@@ -17,9 +17,11 @@ const faqs = [
 ];
 
 export default function App() {
+
+    
     return (
         <div>
-            <Accordion faqs={faqs} />
+            <Accordion data={faqs} />
         </div>
     );
 }
