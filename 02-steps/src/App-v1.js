@@ -7,14 +7,6 @@ const messages = [
 ];
 
 export default function App() {
-    return (
-        <>
-            <Steps data={messages} />
-        </>
-    );
-}
-
-function Steps({ data }) {
     const [step, setStep] = useState(1);
     const [isOpen, setIsOpen] = useState(true);
 
@@ -44,38 +36,30 @@ function Steps({ data }) {
                     </div>
 
                     <p className='message'>
-                        Step {step}: {data[step - 1]}
+                        Step {step}: {messages[step - 1]}
                     </p>
                     <div className='buttons'>
-                        <Button
-                            textColor='#fff'
-                            bgColor='#7950f2'
+                        <button
+                            style={{
+                                backgroundColor: '#7950f2',
+                                color: '#fff',
+                            }}
                             onClick={handlePrevious}
-                            text='Previous'
-                        />
-                        <Button
-                            textColor='#fff'
-                            bgColor='#7950f2'
+                        >
+                            Previous
+                        </button>
+                        <button
+                            style={{
+                                backgroundColor: '#7950f2',
+                                color: '#fff',
+                            }}
                             onClick={handleNext}
-                            text='Next'
-                        />
+                        >
+                            Next
+                        </button>
                     </div>
                 </div>
             )}
         </>
-    );
-}
-
-function Button({ textColor, bgColor, onClick, text }) {
-    return (
-        <button
-            style={{
-                backgroundColor: bgColor,
-                color: textColor,
-            }}
-            onClick={onClick}
-        >
-            {text}
-        </button>
     );
 }
