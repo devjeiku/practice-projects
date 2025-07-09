@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Bill from './Bill';
 
 function App() {
     const [bill, setBill] = useState(0);
@@ -32,14 +33,7 @@ function App() {
     return (
         <>
             <div>
-                <div>
-                    <span>How much was the bill?</span>
-                    <input
-                        type='text'
-                        value={bill}
-                        onChange={(e) => setBill(Number(e.target.value))}
-                    />
-                </div>
+                <Bill bill={bill} onHandleBill={setBill} />
 
                 <div>
                     <span>How did you like the service?</span>
