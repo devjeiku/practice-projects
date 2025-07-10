@@ -5,7 +5,7 @@ import Output from './Output';
 import Reset from './Reset';
 
 export default function TipCalculator() {
-    const [bill, setBill] = useState(0);
+    const [bill, setBill] = useState('');
     const [myTip, setMyTip] = useState(0);
     const [friendTip, setFriendTip] = useState(0);
 
@@ -21,18 +21,16 @@ export default function TipCalculator() {
     // else if (friendTip > 0) averageTip = friendTipCalculated;
     // else averageTip = myTipCalculated;
 
-    const tips = [myTip, friendTip].filter((tip) => tip > 0);
+    const tips = [myTip, friendTip];
     const averageTip =
         tips.length > 0
-            ? Math.round(
-                  tips.reduce((sum, tip) => sum + bill * tip, 0) / tips.length
-              )
+            ? tips.reduce((sum, tip) => sum + bill * tip, 0) / tips.length / 100
             : 0;
 
     total = Math.round(bill + averageTip);
 
     function handleReset() {
-        setBill(0);
+        setBill('');
         setMyTip(0);
         setFriendTip(0);
     }
