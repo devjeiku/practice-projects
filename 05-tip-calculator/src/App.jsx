@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Bill from './Bill';
+import TipRating from './TipRating';
 
 function App() {
     const [bill, setBill] = useState(0);
@@ -35,31 +36,13 @@ function App() {
             <div>
                 <Bill bill={bill} onHandleBill={setBill} />
 
-                <div>
-                    <span>How did you like the service?</span>
-                    <select
-                        value={myTip}
-                        onChange={(e) => setMyTip(Number(e.target.value))}
-                    >
-                        <option value={0}>Dissatisfied (0%)</option>
-                        <option value={0.05}>It was okay (5%)</option>
-                        <option value={0.1}>It was good (10%)</option>
-                        <option value={0.2}>Absolutely Amazing! (20%)</option>
-                    </select>
-                </div>
+                <TipRating tip={myTip} onHandleTip={setMyTip}>
+                    How did you like the service?
+                </TipRating>
 
-                <div>
-                    <span>How did your friend like the service?</span>
-                    <select
-                        value={friendTip}
-                        onChange={(e) => setFriendTip(Number(e.target.value))}
-                    >
-                        <option value={0}>Dissatisfied (0%)</option>
-                        <option value={0.05}>It was okay (5%)</option>
-                        <option value={0.1}>It was good (10%)</option>
-                        <option value={0.2}>Absolutely Amazing! (20%)</option>
-                    </select>
-                </div>
+                <TipRating tip={friendTip} onHandleTip={setFriendTip}>
+                    How did your friend like the service?
+                </TipRating>
 
                 {bill > 0 && (
                     <div>
