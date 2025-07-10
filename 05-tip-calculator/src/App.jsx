@@ -7,23 +7,19 @@ function App() {
     const [myTip, setMyTip] = useState(0);
     const [friendTip, setFriendTip] = useState(0);
 
-    // const finalTip = bill * tip;
-    // const finalFriendTip = bill * friendTip;
-    // const totalTip = (finalTip + finalFriendTip) / 2;
-
-    // const total = bill + totalTip;
-
     let total;
 
-    const myTipFinal = bill * myTip;
-    const friendTipFinal = bill * friendTip;
+    const myTipCalculated = bill * myTip;
+    const friendTipCalculated = bill * friendTip;
 
-    let average;
+    let averageTip;
 
-    if (friendTip > 0) average = (myTipFinal + friendTipFinal) / 2;
-    else average = myTipFinal;
+    if (friendTip > 0 && myTip > 0)
+        averageTip = (myTipCalculated + friendTipCalculated) / 2;
+    else if (friendTip > 0) averageTip = friendTipCalculated;
+    else averageTip = myTipCalculated;
 
-    total = bill + average;
+    total = bill + averageTip;
 
     function handleReset() {
         setBill(0);
@@ -46,7 +42,7 @@ function App() {
 
                 {bill > 0 && (
                     <div>
-                        <div>{`You pay $${total} ($${bill} + $${average} tip)`}</div>
+                        <div>{`You pay $${total} ($${bill} + $${averageTip} tip)`}</div>
                         <button onClick={handleReset}>Reset</button>
                     </div>
                 )}
