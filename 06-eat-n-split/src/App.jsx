@@ -26,14 +26,14 @@ export default function App() {
     const [showAddFriend, setshowAddFriend] = useState(false);
     const [selectedFriend, setSelectedFriend] = useState(null);
 
-    function handleshowAddFriend() {
-        setshowAddFriend((showAddFriend) => !showAddFriend);
-        setSelectedFriend(null);
-    }
-
     function handleAddFriend(friend) {
         setFriends((friends) => [...friends, friend]);
         setshowAddFriend(false);
+    }
+
+    function handleshowAddFriend() {
+        setshowAddFriend((showAddFriend) => !showAddFriend);
+        setSelectedFriend(null);
     }
 
     function handleSelection(friend) {
@@ -41,11 +41,16 @@ export default function App() {
         setshowAddFriend(false);
     }
 
-    // const isOpen = num === currentOpen;
-
-    // function handleToggle() {
-    //     onOpen(isOpen ? null : num);
-    // }
+    function handleSplitBill(expense) {
+        setFriends((friends) =>
+            friends.map((friend) =>
+                friend.id === selectedFriend.id
+                    ? { ...friend, balance: friend.balance + expense }
+                    : friend
+            )
+        );
+        setSelectedFriend(null);
+    }
 
     return (
         <div className='app'>
@@ -65,9 +70,9 @@ export default function App() {
             </div>
             {selectedFriend && (
                 <FormSplitBill
+                    key={selectedFriend.id}
                     selectedFriend={selectedFriend}
-                    friends={friends}
-                    onSetFriends={setFriends}
+                    onSplitBill={handleSplitBill}
                 />
             )}
         </div>
@@ -127,6 +132,7 @@ function FormAddFriend({ onAddFriend }) {
         if (!name || !image) return;
 
         const id = crypto.randomUUID();
+
         const newFriend = {
             name,
             image: `${image}?=${id}`,
@@ -169,39 +175,11 @@ function Button({ children, onClick }) {
     );
 }
 
-function FormSplitBill({ selectedFriend, onSetFriends, friends }) {
+function FormSplitBill({ selectedFriend, onSplitBill }) {
     const [bill, setBill] = useState('');
     const [myExpense, setMyExpense] = useState('');
+    const friendExpense = bill ? bill - myExpense : '';
     const [payor, setPayor] = useState('user');
-
-    // const friendExpense = bill - myExpense;
-
-    // const friendExpense = bill <= myExpense ? '' : bill - myExpense;
-
-    // const friendExpense =
-    //     bill !== '' || myExpense !== ''
-    //         ? Math.max(0, Number(bill) - Number(myExpense))
-    //         : '';
-
-    const friendExpense =
-        bill === '' || bill === 0 // nothing typed in the bill box yet?
-            ? '' // → keep the friend box blank
-            : Number(bill) - Number(myExpense || 0);
-
-    // function handleChange(e) {
-    //     const value = e.target.value;
-
-    //     if (value === '') {
-    //         setBill('');
-    //         return;
-    //     }
-
-    //     const number = Number(value);
-
-    //     if (!isNaN(number)) {
-    //         setBill(number);
-    //     }
-    // }
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -216,23 +194,12 @@ function FormSplitBill({ selectedFriend, onSetFriends, friends }) {
             return;
         }
 
-        // friends.map((friend) =>
-        //     friend.id === selectedFriend.id
-        //         ? { ...friend, balance: friend.balance + friendExpense }
-        //         : friend
-        // );
-        let expense = payor === 'user' ? friendExpense : -myExpense;
-
-        onSetFriends((prev) =>
-            prev.map((friend) =>
-                friend.id === selectedFriend.id
-                    ? { ...friend, balance: friend.balance + expense }
-                    : friend
-            )
-        );
-
         // if user pays, add to the balance
         // if friend pays, subtract to the balance
+
+        let expense = payor === 'user' ? friendExpense : -myExpense;
+
+        onSplitBill(expense);
 
         setBill('');
         setMyExpense('');
@@ -244,16 +211,16 @@ function FormSplitBill({ selectedFriend, onSetFriends, friends }) {
 
             <label>💵 Bill value</label>
             <input
-                type='text'
-                inputMode='numeric'
+                type='number'
+                min={0}
                 value={bill}
                 onChange={(e) => setBill(Number(e.target.value))}
             />
 
             <label>🧑‍🦰 Your expense</label>
             <input
-                type='text'
-                inputMode='numeric'
+                type='number'
+                min={0}
                 value={myExpense}
                 onChange={(e) =>
                     Number(e.target.value) <= bill &&
@@ -262,12 +229,7 @@ function FormSplitBill({ selectedFriend, onSetFriends, friends }) {
             />
 
             <label>🧑‍🤝‍👩 {selectedFriend.name}'s expense:</label>
-            <input
-                type='text'
-                disabled
-                // value={bill && myExpense ? friendExpense : ''}
-                value={friendExpense}
-            />
+            <input type='text' disabled value={friendExpense} />
 
             <label>🤑 Who is paying the bill?</label>
             <select value={payor} onChange={(e) => setPayor(e.target.value)}>
